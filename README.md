@@ -12,7 +12,7 @@
 1. clone the repo and make sure you have installed `tensorflow` or `tensorflow-gpu` on your local machine,then use `pip install -r requirements.txt` to setup the operating environment.
 2. run following commands
 ```bash
-cd examples
+cd gnn
 python run_gcn_cora.py
 ```
 
