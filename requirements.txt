@@ -1,0 +1,4 @@
+networkx==2.2
+numpy
+scikit-learn
+matplotlib
