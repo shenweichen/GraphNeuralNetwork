@@ -91,7 +91,7 @@ class GraphConvolution(Layer):  # ReLU(AXW)
         return dict(list(base_config.items()) + list(config.items()))
 
 
-def GCN(adj_dim, num_class, feature_dim, dropout_rate=0.5, l2_reg=0, feature_less=True, ):
+def GCN(adj_dim, num_class, feature_dim, dropout_rate=0.5, l2_reg=0, feature_less=False, ):
     Adjs = [Input(shape=(None,), sparse=True)]
     if feature_less:
         X_in = Input(shape=(1,), )
