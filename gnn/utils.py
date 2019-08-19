@@ -7,8 +7,6 @@ from sklearn.model_selection import train_test_split
 
 def get_splits(y, shuffle=True):
     idx_list = np.arange(len(y))
-    train_val, idx_test = train_test_split(idx_list, test_size=0.2, random_state=1024)  # 1000
-    idx_train, idx_val = train_test_split(train_val, test_size=0.2, random_state=1024)  # 500
 
     idx_train = []
     label_count = {}
@@ -50,8 +48,7 @@ def load_data(path="../data/cora/", dataset="cora"):
     adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])),
                         shape=(onehot_labels.shape[0], onehot_labels.shape[0]), dtype=np.float32)
 
-    # build symmetric adjacency matrix
-    # adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
+
     adj = convert_symmetric(adj, )
 
     print('Dataset has {} nodes, {} edges, {} features.'.format(adj.shape[0], edges.shape[0], features.shape[1]))
