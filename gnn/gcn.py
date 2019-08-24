@@ -20,7 +20,6 @@ Reference:
 """
 
 import tensorflow as tf
-from tensorflow.python.keras import activations
 from tensorflow.python.keras.initializers import Identity, glorot_uniform, Zeros
 from tensorflow.python.keras.layers import Dropout, Input, Layer, Embedding, Reshape
 from tensorflow.python.keras.models import Model
@@ -30,7 +29,7 @@ from tensorflow.python.keras.regularizers import l2
 class GraphConvolution(Layer):  # ReLU(AXW)
 
     def __init__(self, units,
-                 activation='relu', dropout_rate=0.5,
+                 activation=tf.nn.relu, dropout_rate=0.5,
                  use_bias=True, l2_reg=0, feature_less=False,
                  seed=1024, **kwargs):
         super(GraphConvolution, self).__init__(**kwargs)
@@ -39,7 +38,7 @@ class GraphConvolution(Layer):  # ReLU(AXW)
         self.use_bias = use_bias
         self.l2_reg = l2_reg
         self.dropout_rate = dropout_rate
-        self.activation = activations.get(activation)
+        self.activation = activation
         self.seed = seed
 
     def build(self, input_shapes):
@@ -54,7 +53,8 @@ class GraphConvolution(Layer):  # ReLU(AXW)
 
         self.kernel = self.add_weight(shape=(input_dim,
                                              self.units),
-                                      initializer=glorot_uniform(seed=self.seed),
+                                      initializer=glorot_uniform(
+                                          seed=self.seed),
                                       regularizer=l2(self.l2_reg),
                                       name='kernel', )
         if self.use_bias:
@@ -69,7 +69,8 @@ class GraphConvolution(Layer):  # ReLU(AXW)
     def call(self, inputs, training=None, **kwargs):
         features, A = inputs
         features = self.dropout(features, training=training)
-        output = tf.matmul(tf.sparse_tensor_dense_matmul(A, features), self.kernel)
+        output = tf.matmul(tf.sparse_tensor_dense_matmul(
+            A, features), self.kernel)
         if self.bias:
             output += self.bias
         act = self.activation(output)
@@ -91,24 +92,27 @@ class GraphConvolution(Layer):  # ReLU(AXW)
         return dict(list(base_config.items()) + list(config.items()))
 
 
-def GCN(adj_dim, num_class, feature_dim, dropout_rate=0.5, l2_reg=0, feature_less=False, ):
-    Adjs = [Input(shape=(None,), sparse=True)]
+def GCN(adj_dim,feature_dim,n_hidden, num_class, num_layers=2,activation=tf.nn.relu,dropout_rate=0.5, l2_reg=0, feature_less=True, ):
+    Adj = Input(shape=(None,), sparse=True)
     if feature_less:
         X_in = Input(shape=(1,), )
 
-        emb = Embedding(adj_dim, feature_dim, embeddings_initializer=Identity(1.0), trainable=False)
+        emb = Embedding(adj_dim, feature_dim,
+                        embeddings_initializer=Identity(1.0), trainable=False)
         X_emb = emb(X_in)
-        H = Reshape([X_emb.shape[-1]])(X_emb)
+        h = Reshape([X_emb.shape[-1]])(X_emb)
     else:
         X_in = Input(shape=(feature_dim,), )
 
-        H = X_in
+        h = X_in
 
-    H = GraphConvolution(16, activation='relu', dropout_rate=dropout_rate, l2_reg=l2_reg)(
-        [H] + Adjs)
-    Y = GraphConvolution(num_class, activation='softmax', dropout_rate=dropout_rate, l2_reg=0)(
-        [H] + Adjs)
+    for i in range(num_layers):
+        if i == num_layers - 1:
+            activation = tf.nn.softmax
+            n_hidden = num_class
+        h = GraphConvolution(n_hidden, activation=activation, dropout_rate=dropout_rate, l2_reg=l2_reg)([h,Adj])
 
-    model = Model(inputs=[X_in] + Adjs, outputs=Y)
+    output = h
+    model = Model(inputs=[X_in,Adj], outputs=output)
 
     return model
