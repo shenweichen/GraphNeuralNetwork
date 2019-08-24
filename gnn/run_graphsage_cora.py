@@ -63,8 +63,8 @@ if __name__ == "__main__":
           'Test weighted_loss: {}\n'
           'Test accuracy: {}'.format(*eval_results))
 
-gcn_embedding = model.layers[-1]
-embedding_model = Model(model.input, outputs=Lambda(lambda x: gcn_embedding.output)(model.input))
-embedding_weights = embedding_model.predict(model_input, batch_size=A.shape[0])
-y  = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
-plot_embeddings(embedding_weights, np.arange(A.shape[0]), y)
+    gcn_embedding = model.layers[-1]
+    embedding_model = Model(model.input, outputs=Lambda(lambda x: gcn_embedding.output)(model.input))
+    embedding_weights = embedding_model.predict(model_input, batch_size=A.shape[0])
+    y  = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
+    plot_embeddings(embedding_weights, np.arange(A.shape[0]), y)

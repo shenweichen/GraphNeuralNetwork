@@ -2,10 +2,12 @@
 # coding: utf-8
 
 import numpy as np
-from tensorflow.python.keras.callbacks import  ModelCheckpoint
+from tensorflow.python.keras.callbacks import ModelCheckpoint
 from tensorflow.python.keras.optimizers import Adam
+from tensorflow.python.keras.layers import Lambda
+from tensorflow.python.keras.models import  Model
 from gcn import GCN
-from utils import load_data_v1, preprocess_adj
+from utils import preprocess_adj,plot_embeddings, load_data_v1
 
 if __name__ == "__main__":
 
@@ -54,7 +56,7 @@ if __name__ == "__main__":
           'Test weighted_loss: {}\n'
           'Test accuracy: {}'.format(*eval_results))
 
-    # embedding_model = Model(model.input, outputs=Lambda(lambda x: model.layers[-1].output)(model.input))
-    # embedding_weights = embedding_model.predict(model_input, batch_size=A.shape[0])
-    # y  = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
-    # plot_embeddings(embedding_weights, np.arange(A.shape[0]), y)
+    embedding_model = Model(model.input, outputs=Lambda(lambda x: model.layers[-1].output)(model.input))
+    embedding_weights = embedding_model.predict(model_input, batch_size=A.shape[0])
+    y  = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
+    plot_embeddings(embedding_weights, np.arange(A.shape[0]), y)

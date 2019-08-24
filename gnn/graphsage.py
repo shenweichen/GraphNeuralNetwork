@@ -174,101 +174,6 @@ class PoolingAggregator(Layer):
         return dict(list(base_config.items()) + list(config.items()))
 
 
-class LSTMAggregator(Layer):
-
-    def __init__(self, units, input_dim, activation=tf.nn.relu, concat=True, dropout_rate=0.0, l2_reg=0, use_bias=False,
-                 seed=1024, **kwargs):
-        super(LSTMAggregator, self).__init__()
-        self.units = units
-        self.input_dim = input_dim
-        self.concat = concat
-        self.dropout_rate = dropout_rate
-        self.l2_reg = l2_reg
-        self.use_bias = use_bias
-        self.activation = activation
-        self.seed = seed
-
-    def build(self, input_shapes):
-
-        # self.vars['neigh_weights'] = glorot([hidden_dim, output_dim],
-        #                                     name='neigh_weights')
-        #
-        # self.vars['self_weights'] = glorot([input_dim, output_dim],
-        #                                    name='self_weights')
-
-        self.node_weights = self.add_weight(shape=(self.input_dim, self.units),
-                                            initializer=glorot_uniform(
-                                                seed=self.seed),
-                                            regularizer=l2(self.l2_reg),
-                                            name="node_weights")
-
-        self.neigh_weights = self.add_weight(shape=(self.units, self.units),
-                                             initializer=glorot_uniform(
-                                                 seed=self.seed),
-                                             regularizer=l2(self.l2_reg),
-                                             name="neigh_weights")
-
-        # self.temp_weights = self.add_weight(
-        #     shape=(self.units * 2, self.units),
-        #     initializer=glorot_uniform(
-        #         seed=self.seed),
-        #     regularizer=l2(self.l2_reg),
-        #
-        #     name="temp_weights")
-        # self.dropout = Dropout(self.dropout_rate)
-        self.lstm = LSTM(self.units, dropout=0.0, bias_initializer='ones', return_sequences=False,
-                         unroll=True)
-
-        if self.use_bias:
-            self.bias = self.add_weight(shape=(self.units,), initializer=Zeros(),
-                                        name='bias_weight')
-
-        self.built = True
-
-    def call(self, inputs, training=None):  # tf.nn.dropout(neigh_feat,1-self.dropout_rate)
-
-        features, node, neighbours = inputs
-
-        node_feat = tf.nn.embedding_lookup(features, node)
-        neigh_feat = tf.nn.embedding_lookup(features, neighbours)
-
-        neigh_means = self.lstm(neigh_feat)
-
-        from_self = tf.matmul(tf.squeeze(node_feat, axis=1), self.node_weights)
-        # [?,10,128], [1433,128].
-        from_neighs = neigh_means  # tf.matmul(neigh_means, self.neigh_weights)
-
-        # output = tf.concat(
-        #    [tf.squeeze(node_feat, axis=1), neigh_means], axis=-1)
-        # output = tf.matmul(output, self.neigh_weights)  # ?,1449], [32,16].
-
-        # if self.concat:
-        # output = #tf.concat([from_self, from_neighs], axis=1)
-        output = (from_self + from_neighs) / 2  # tf.reduce_mean(output,axis=1)
-        # else:
-        # output = tf.add_n([from_self, from_neighs])
-        # output = tf.matmul(output,self.temp_weights)
-
-        if self.use_bias:
-            output += self.bias
-
-        if self.activation:
-            output = self.activation(output)
-
-        output._uses_learning_phase = True
-
-        return output
-
-    def get_config(self):
-        config = {'units': self.units,
-                  'concat': self.concat,
-                  'seed': self.seed
-                  }
-
-        base_config = super(LSTMAggregator, self).get_config()
-        return dict(list(base_config.items()) + list(config.items()))
-
-
 def GraphSAGE(feature_dim, neighbor_num, n_hidden, n_classes, use_bias=True, activation=tf.nn.relu,
               aggregator_type='mean', dropout_rate=0.0, l2_reg=0):
     features = Input(shape=(feature_dim,))
@@ -277,8 +182,6 @@ def GraphSAGE(feature_dim, neighbor_num, n_hidden, n_classes, use_bias=True, act
 
     if aggregator_type == 'mean':
         aggregator = MeanAggregator
-    # elif aggregator_type == 'lstm':
-    #     aggregator = LSTMAggregator
     else:
         aggregator = PoolingAggregator
 
