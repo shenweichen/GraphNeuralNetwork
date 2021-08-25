@@ -2,4 +2,4 @@ networkx
 numpy
 scikit-learn
 matplotlib
-tensorflow==1.4.0
+tensorflow==2.5.1
