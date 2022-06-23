@@ -16,7 +16,7 @@ def test_GraphSAGE():
     # Read data
 
     A, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data_v1(
-        'cora')
+        'cora', path="./data/cora/")
 
     features /= features.sum(axis=1, ).reshape(-1, 1)
 

@@ -18,7 +18,7 @@ from gnn.utils import preprocess_adj, load_data_v1
 def test_GCN(FEATURE_LESS):
 
     A, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data_v1(
-        'cora')
+        'cora', path="./data/cora/")
 
     A = preprocess_adj(A)
 
