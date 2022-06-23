@@ -4,9 +4,9 @@
 import scipy.sparse as sp
 
 try:
-    from tensorflow.python.keras.optimizers import Adam
-except ImportError:
     from tensorflow.keras.optimizers import Adam
+except ImportError:
+    from tensorflow.python.keras.optimizers import Adam
 from gnn.gat import GAT
 from gnn.utils import load_data_v1
 
