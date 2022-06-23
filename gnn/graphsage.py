@@ -66,7 +66,10 @@ class MeanAggregator(Layer):
         neigh_feat = self.dropout(neigh_feat, training=training)
 
         concat_feat = tf.concat([neigh_feat, node_feat], axis=1)
-        concat_mean = tf.reduce_mean(concat_feat, axis=1, keep_dims=False)
+        try:
+            concat_mean = tf.reduce_mean(concat_feat, axis=1, keep_dims=False)
+        except TypeError:
+            concat_mean = tf.reduce_mean(concat_feat, axis=1, keepdims=False)
 
         output = tf.matmul(concat_mean, self.neigh_weights)
         if self.use_bias:
