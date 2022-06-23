@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import numpy as np
 import networkx as nx
+import numpy as np
 import tensorflow as tf
-from tensorflow.python.keras.callbacks import ModelCheckpoint
-from tensorflow.python.keras.optimizers import Adam
-from tensorflow.python.keras.layers import Lambda
-from tensorflow.python.keras.models import  Model
+
+try:
+    from tensorflow.python.keras.optimizers import Adam
+except ImportError:
+    from tensorflow.python.keras.optimizers import adam_v2 as Adam
+
 from gnn.graphsage import sample_neighs, GraphSAGE
 from gnn.utils import preprocess_adj, load_data_v1
 

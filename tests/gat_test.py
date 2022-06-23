@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import pytest
 import scipy.sparse as sp
-import  numpy as np
-from tensorflow.python.keras.callbacks import ModelCheckpoint
-from tensorflow.python.keras.layers import Lambda
-from tensorflow.python.keras.models import Model
-from tensorflow.python.keras.optimizers import Adam
+
+try:
+    from tensorflow.python.keras.optimizers import Adam
+except ImportError:
+    from tensorflow.python.keras.optimizers import adam_v2 as Adam
 from gnn.gat import GAT
-from gnn.utils import preprocess_adj, load_data_v1
+from gnn.utils import load_data_v1
 
 
 def test_GAT():
