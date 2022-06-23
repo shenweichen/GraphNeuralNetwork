@@ -8,7 +8,7 @@ import tensorflow as tf
 try:
     from tensorflow.python.keras.optimizers import Adam
 except ImportError:
-    from tensorflow.python.keras.optimizers.adam_v2 import Adam
+    from tensorflow.keras.optimizers import Adam
 
 from gnn.graphsage import sample_neighs, GraphSAGE
 from gnn.utils import preprocess_adj, load_data_v1
