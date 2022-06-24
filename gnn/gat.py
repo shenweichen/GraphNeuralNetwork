@@ -78,10 +78,16 @@ class GATLayer(Layer):
         # keys = tf.stack(tf.split(keys, self.head_num, axis=1))#[?,1,1433,64]
 
         # features = tf.stack(tf.split(features, self.head_num, axis=1))  # head_num None F'
-        attn_for_self = tf.reduce_sum(
-            features * self.att_self_weight, axis=-1, keep_dims=True)  # None head_num 1
-        attn_for_neighs = tf.reduce_sum(
-            features * self.att_neighs_weight, axis=-1, keep_dims=True)
+        try:
+            attn_for_self = tf.reduce_sum(
+                features * self.att_self_weight, axis=-1, keep_dims=True)  # None head_num 1
+            attn_for_neighs = tf.reduce_sum(
+                features * self.att_neighs_weight, axis=-1, keep_dims=True)
+        except TypeError:
+            attn_for_self = tf.reduce_sum(
+                features * self.att_self_weight, axis=-1, keepdims=True)  # None head_num 1
+            attn_for_neighs = tf.reduce_sum(
+                features * self.att_neighs_weight, axis=-1, keepdims=True)
         dense = tf.transpose(
             attn_for_self, [1, 0, 2]) + tf.transpose(attn_for_neighs, [1, 2, 0])
 
