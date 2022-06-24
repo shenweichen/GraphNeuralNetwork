@@ -223,4 +223,4 @@ def sample_neighs(G, nodes, sample_num=None, self_loop=False, shuffle=True):  # 
             samp_neighs = [list(np.random.permutation(x)) for x in samp_neighs]
     else:
         samp_neighs = neighs
-    return np.asarray(samp_neighs), np.asarray(list(map(len, samp_neighs)))
+    return np.asarray(samp_neighs, dtype=np.float32), np.asarray(list(map(len, samp_neighs)))
