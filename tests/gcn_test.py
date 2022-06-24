@@ -20,8 +20,13 @@ from gnn.utils import preprocess_adj, load_data_v1
      ]
 )
 def test_GCN(FEATURE_LESS):
-    if tf.__version__ >= "2.0.0": #todo
+
+    if tf.__version__ >= '2.0.0': #todo
+        tf.compat.v1.disable_eager_execution()
         return
+    else:
+        from tensorflow.python.keras import backend as K
+        K.set_learning_phase(True)
     A, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data_v1(
         'cora', path="./data/cora/")
 
