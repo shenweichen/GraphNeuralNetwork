@@ -95,8 +95,12 @@ class GATLayer(Layer):
         mask = -10e9 * (1.0 - A)
         dense += tf.expand_dims(mask, axis=0)  # [?,8,8], [1,?,2708]
 
-        self.normalized_att_scores = tf.nn.softmax(
-            dense, dim=-1, )  # head_num None(F) None(F)
+        try:
+            self.normalized_att_scores = tf.nn.softmax(
+                dense, dim=-1, )  # head_num None(F) None(F)
+        except TypeError:
+            self.normalized_att_scores = tf.nn.softmax(
+                dense, axis=-1, )  # head_num None(F) None(F)
 
         features = self.feat_dropout(features, )
         self.normalized_att_scores = self.att_dropout(
