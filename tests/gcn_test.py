@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+import tensorflow as tf
 import numpy as np
 import pytest
 
 try:
     from tensorflow.python.keras.optimizers import Adam
 except ImportError:
-    import tensorflow as tf
     tf.compat.v1.disable_eager_execution()
     from tensorflow.python.keras.optimizer_v1 import Adam
 
