@@ -7,7 +7,7 @@ import pytest
 try:
     from tensorflow.python.keras.optimizers import Adam
 except ImportError:
-    from tensorflow.keras.optimizers import Adam
+    from tensorflow.python.keras.optimizer_v1 import Adam
 
 from gnn.gcn import GCN
 from gnn.utils import preprocess_adj, load_data_v1
