@@ -79,7 +79,7 @@ class GraphConvolution(Layer):  # ReLU(AXW)
             output += self.bias
         act = self.activation(output)
 
-        act._uses_learning_phase = features._uses_learning_phase
+        #act._uses_learning_phase = features._uses_learning_phase
         return act
 
     def get_config(self):
