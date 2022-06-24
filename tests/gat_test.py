@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import tensorflow as tf
 import scipy.sparse as sp
 
 try:
     from tensorflow.python.keras.optimizers import Adam
 except ImportError:
-    import tensorflow as tf
-    tf.compat.v1.disable_eager_execution()
     from tensorflow.python.keras.optimizer_v1 import Adam
 from gnn.gat import GAT
 from gnn.utils import load_data_v1
@@ -15,7 +14,9 @@ from gnn.utils import load_data_v1
 
 def test_GAT():
     # Read data
-
+    if tf.__version__ >= '2.0.0': #todo
+        tf.compat.v1.disable_eager_execution()
+        return
     A, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data_v1(
         'cora', path="./data/cora/")
 
