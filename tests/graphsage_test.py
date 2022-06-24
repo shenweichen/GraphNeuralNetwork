@@ -8,6 +8,7 @@ import tensorflow as tf
 try:
     from tensorflow.python.keras.optimizers import Adam
 except ImportError:
+    tf.compat.v1.disable_eager_execution()
     from tensorflow.python.keras.optimizer_v1 import Adam
 
 from gnn.graphsage import sample_neighs, GraphSAGE

@@ -6,6 +6,8 @@ import scipy.sparse as sp
 try:
     from tensorflow.python.keras.optimizers import Adam
 except ImportError:
+    import tensorflow as tf
+    tf.compat.v1.disable_eager_execution()
     from tensorflow.python.keras.optimizer_v1 import Adam
 from gnn.gat import GAT
 from gnn.utils import load_data_v1
