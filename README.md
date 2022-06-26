@@ -20,5 +20,6 @@ python run_gat_cora.py
 ```
 
 # DisscussionGroup
-- 公众号：**浅梦的学习笔记**    wechat ID: **deepctrbot**
-![wechat](https://github.com/shenweichen/GraphEmbedding/blob/master/pics/weichennote.png)
+|公众号：浅梦学习笔记|微信：deepctrbot|
+|:--:|:--:|
+| [![公众号](https://github.com/shenweichen/GraphEmbedding/blob/master/pics/code.png)](https://github.com/shenweichen/AlgoNotes)| [![微信](https://github.com/shenweichen/GraphEmbedding/blob/master/pics/deepctrbot.png)](https://github.com/shenweichen/AlgoNotes)|
