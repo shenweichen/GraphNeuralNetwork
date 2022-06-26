@@ -97,7 +97,7 @@ class GraphConvolution(Layer):  # ReLU(AXW)
 
 
 def GCN(adj_dim,feature_dim,n_hidden, num_class, num_layers=2,activation=tf.nn.relu,dropout_rate=0.5, l2_reg=0, feature_less=True, ):
-    Adj = Input(shape=(None,), sparse=True)
+    Adj = Input(shape=(adj_dim,))#Input(shape=(None,), sparse=True)
     if feature_less:
         X_in = Input(shape=(1,), )
 
