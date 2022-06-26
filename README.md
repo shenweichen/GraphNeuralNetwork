@@ -10,7 +10,7 @@
 | GAT  | [ICLR 2018][Graph Attention Nerworks](https://arxiv.org/pdf/1710.10903.pdf) |  |
 
 # How to run examples
-1. clone the repo and use `pip install -r requirements.txt` to setup the operating environment.
+1. clone the repo and use `pip install -r requirements.txt` to setup the operating environment with `python>=3.6`.
 2. run following commands
 ```bash
 cd gnn
@@ -20,5 +20,6 @@ python run_gat_cora.py
 ```
 
 # DisscussionGroup
-- 公众号：**浅梦的学习笔记**    wechat ID: **deepctrbot**
-![wechat](https://github.com/shenweichen/GraphEmbedding/blob/master/pics/weichennote.png)
+|公众号：浅梦学习笔记|微信：deepctrbot|
+|:--:|:--:|
+| [![公众号](https://github.com/shenweichen/GraphEmbedding/blob/master/pics/code.png)](https://github.com/shenweichen/AlgoNotes)| [![微信](https://github.com/shenweichen/GraphEmbedding/blob/master/pics/deepctrbot.png)](https://github.com/shenweichen/AlgoNotes)|

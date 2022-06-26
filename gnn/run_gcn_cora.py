@@ -3,11 +3,12 @@
 
 import numpy as np
 from tensorflow.python.keras.callbacks import ModelCheckpoint
-from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.layers import Lambda
-from tensorflow.python.keras.models import  Model
+from tensorflow.python.keras.models import Model
+from tensorflow.python.keras.optimizers import Adam
+
 from gcn import GCN
-from utils import preprocess_adj,plot_embeddings, load_data_v1
+from utils import preprocess_adj, plot_embeddings, load_data_v1
 
 if __name__ == "__main__":
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
     model_input = [X, A]
 
     # Compile model
-    model = GCN(A.shape[-1], feature_dim, 16, y_train.shape[1],  dropout_rate=0.5, l2_reg=2.5e-4,
+    model = GCN(A.shape[-1], feature_dim, 16, y_train.shape[1], dropout_rate=0.5, l2_reg=2.5e-4,
                 feature_less=FEATURE_LESS, )
     model.compile(optimizer=Adam(0.01), loss='categorical_crossentropy',
                   weighted_metrics=['categorical_crossentropy', 'acc'])
@@ -58,5 +59,5 @@ if __name__ == "__main__":
 
     embedding_model = Model(model.input, outputs=Lambda(lambda x: model.layers[-1].output)(model.input))
     embedding_weights = embedding_model.predict(model_input, batch_size=A.shape[0])
-    y  = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
+    y = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
     plot_embeddings(embedding_weights, np.arange(A.shape[0]), y)

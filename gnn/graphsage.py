@@ -21,7 +21,7 @@ Reference:
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.keras.initializers import glorot_uniform, Zeros
-from tensorflow.python.keras.layers import Input, Dense, Dropout, Layer, LSTM
+from tensorflow.python.keras.layers import Input, Dense, Dropout, Layer
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.regularizers import l2
 
@@ -66,7 +66,10 @@ class MeanAggregator(Layer):
         neigh_feat = self.dropout(neigh_feat, training=training)
 
         concat_feat = tf.concat([neigh_feat, node_feat], axis=1)
-        concat_mean = tf.reduce_mean(concat_feat, axis=1, keep_dims=False)
+        try:
+            concat_mean = tf.reduce_mean(concat_feat, axis=1, keep_dims=False)
+        except TypeError:
+            concat_mean = tf.reduce_mean(concat_feat, axis=1, keepdims=False)
 
         output = tf.matmul(concat_mean, self.neigh_weights)
         if self.use_bias:
@@ -220,4 +223,4 @@ def sample_neighs(G, nodes, sample_num=None, self_loop=False, shuffle=True):  # 
             samp_neighs = [list(np.random.permutation(x)) for x in samp_neighs]
     else:
         samp_neighs = neighs
-    return np.asarray(samp_neighs), np.asarray(list(map(len, samp_neighs)))
+    return np.asarray(samp_neighs, dtype=np.float32), np.asarray(list(map(len, samp_neighs)))
