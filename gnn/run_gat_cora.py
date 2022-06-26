@@ -3,14 +3,15 @@
 
 from __future__ import division
 
+import numpy as np
 import scipy.sparse as sp
-import  numpy as np
-from gat import GAT
 from tensorflow.python.keras.callbacks import ModelCheckpoint
 from tensorflow.python.keras.layers import Lambda
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.optimizers import Adam
-from utils import plot_embeddings,load_data_v1
+
+from gat import GAT
+from utils import plot_embeddings, load_data_v1
 
 if __name__ == "__main__":
     # Read data

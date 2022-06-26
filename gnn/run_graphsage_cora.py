@@ -1,13 +1,13 @@
-import numpy as np
 import networkx as nx
+import numpy as np
 import tensorflow as tf
 from tensorflow.python.keras.callbacks import ModelCheckpoint
-from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.layers import Lambda
-from tensorflow.python.keras.models import  Model
-from graphsage import sample_neighs, GraphSAGE
-from utils import preprocess_adj,plot_embeddings, load_data_v1
+from tensorflow.python.keras.models import Model
+from tensorflow.python.keras.optimizers import Adam
 
+from graphsage import sample_neighs, GraphSAGE
+from utils import preprocess_adj, plot_embeddings, load_data_v1
 
 if __name__ == "__main__":
 
@@ -43,7 +43,6 @@ if __name__ == "__main__":
     model.compile(Adam(0.01), 'categorical_crossentropy',
                   weighted_metrics=['categorical_crossentropy', 'acc'])
 
-
     val_data = (model_input, y_val, val_mask)
     mc_callback = ModelCheckpoint('./best_model.h5',
                                   monitor='val_weighted_categorical_crossentropy',
@@ -66,5 +65,5 @@ if __name__ == "__main__":
     gcn_embedding = model.layers[-1]
     embedding_model = Model(model.input, outputs=Lambda(lambda x: gcn_embedding.output)(model.input))
     embedding_weights = embedding_model.predict(model_input, batch_size=A.shape[0])
-    y  = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
+    y = np.genfromtxt("{}{}.content".format('../data/cora/', 'cora'), dtype=np.dtype(str))[:, -1]
     plot_embeddings(embedding_weights, np.arange(A.shape[0]), y)

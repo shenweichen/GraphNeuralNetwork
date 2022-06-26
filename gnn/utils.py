@@ -1,15 +1,15 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import networkx as nx
-import scipy.sparse as sp
-from sklearn.manifold import TSNE
-
 import os
 import pickle as pkl
 import sys
 
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import scipy.sparse as sp
+from sklearn.manifold import TSNE
 
-def get_splits(y,):
+
+def get_splits(y, ):
     idx_list = np.arange(len(y))
     # train_val, idx_test = train_test_split(idx_list, test_size=0.2, random_state=1024)  # 1000
     # idx_train, idx_val = train_test_split(train_val, test_size=0.2, random_state=1024)  # 500
@@ -26,7 +26,6 @@ def get_splits(y,):
     idx_val = idx_val_test[0:500]
     idx_test = idx_val_test[500:1500]
 
-
     y_train = np.zeros(y.shape, dtype=np.int32)
     y_val = np.zeros(y.shape, dtype=np.int32)
     y_test = np.zeros(y.shape, dtype=np.int32)
@@ -37,11 +36,10 @@ def get_splits(y,):
     val_mask = sample_mask(idx_val, y.shape[0])
     test_mask = sample_mask(idx_test, y.shape[0])
 
-    return y_train, y_val, y_test,train_mask, val_mask, test_mask
+    return y_train, y_val, y_test, train_mask, val_mask, test_mask
 
 
-def load_data_v1(dataset="cora", path="../data/cora/",):
-
+def load_data_v1(dataset="cora", path="../data/cora/", ):
     idx_features_labels = np.genfromtxt("{}{}.content".format(path, dataset), dtype=np.dtype(str))
     features = sp.csr_matrix(idx_features_labels[:, 1:-1], dtype=np.float32)
     onehot_labels = encode_onehot(idx_features_labels[:, -1])
@@ -66,13 +64,13 @@ def load_data_v1(dataset="cora", path="../data/cora/",):
     return adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask
 
 
-
 def parse_index_file(filename):
     """Parse index file."""
     index = []
     for line in open(filename):
         index.append(int(line.strip()))
     return index
+
 
 def load_data(dataset_str):
     """Load data."""
@@ -128,9 +126,7 @@ def load_data(dataset_str):
     y_val[val_mask, :] = labels[val_mask, :]
     y_test[test_mask, :] = labels[test_mask, :]
 
-
     return sp.csr_matrix(adj), features, y_train, y_val, y_test, train_mask, val_mask, test_mask
-
 
 
 def sample_mask(idx, l):
@@ -171,7 +167,6 @@ def preprocess_adj(adj, symmetric=True):
 
 
 def plot_embeddings(embeddings, X, Y):
-
     emb_list = []
     for k in X:
         emb_list.append(embeddings[k])

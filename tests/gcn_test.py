@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
-import tensorflow as tf
 import numpy as np
 import pytest
+import tensorflow as tf
 
 try:
     from tensorflow.python.keras.optimizers import Adam
@@ -20,8 +20,7 @@ from gnn.utils import preprocess_adj, load_data_v1
      ]
 )
 def test_GCN(FEATURE_LESS):
-
-    if tf.__version__ >= '2.0.0': #todo
+    if tf.__version__ >= '2.0.0':  # todo
         tf.compat.v1.disable_eager_execution()
     else:
         from tensorflow.python.keras import backend as K

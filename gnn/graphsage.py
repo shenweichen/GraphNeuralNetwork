@@ -21,7 +21,7 @@ Reference:
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.keras.initializers import glorot_uniform, Zeros
-from tensorflow.python.keras.layers import Input, Dense, Dropout, Layer, LSTM
+from tensorflow.python.keras.layers import Input, Dense, Dropout, Layer
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.regularizers import l2
 
