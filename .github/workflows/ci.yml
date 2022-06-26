@@ -24,6 +24,8 @@ jobs:
           - python-version: 3.7
             tf-version: 1.4.0
           - python-version: 3.7
+            tf-version: 1.12.0
+          - python-version: 3.7
             tf-version: 1.15.0
           - python-version: 3.8
             tf-version: 1.4.0
