@@ -4,9 +4,9 @@ import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
 try:
-    from tensorflow.python.ops.init_ops import Zeros, glorot_normal_initializer as glorot_normal
+    from tensorflow.python.ops.init_ops import Zeros, glorot_uniform_initializer as glorot_uniform
 except ImportError:
-    from tensorflow.python.ops.init_ops_v2 import Zeros, glorot_normal
+    from tensorflow.python.ops.init_ops_v2 import Zeros, glorot_uniform
 
 from tensorflow.python.keras.layers import Layer, Dropout, Input
 from tensorflow.python.keras.regularizers import l2
