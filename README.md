@@ -10,7 +10,7 @@
 | GAT  | [ICLR 2018][Graph Attention Nerworks](https://arxiv.org/pdf/1710.10903.pdf) |  |
 
 # How to run examples
-1. clone the repo and use `pip install -r requirements.txt` to setup the operating environment.
+1. clone the repo and use `pip install -r requirements.txt` to setup the operating environment with `python>=3.6`.
 2. run following commands
 ```bash
 cd gnn
