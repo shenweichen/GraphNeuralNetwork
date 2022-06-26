@@ -4,12 +4,11 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 REQUIRED_PACKAGES = [
-    'tensorflow>=1.12.0'
     'networkx',
     'numpy',
     'scikit-learn',
     'matplotlib',
-
+    'tensorflow>=1.12.0'
 ]
 
 setuptools.setup(
