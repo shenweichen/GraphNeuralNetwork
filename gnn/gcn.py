@@ -75,6 +75,9 @@ class GraphConvolution(Layer):  # ReLU(AXW)
         except AttributeError:
             output = tf.matmul(tf.sparse.sparse_dense_matmul(
                 A, features), self.kernel)
+        except TypeError:
+            output = tf.matmul(tf.matmul(
+                A, features), self.kernel)
         if self.use_bias:
             output += self.bias
         act = self.activation(output)
