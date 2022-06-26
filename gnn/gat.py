@@ -2,8 +2,13 @@ from __future__ import absolute_import
 
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
-from tensorflow.python.keras.initializers import Zeros
-from tensorflow.python.keras.layers import Layer, Dropout,Input
+
+try:
+    from tensorflow.python.ops.init_ops import Zeros, glorot_normal_initializer as glorot_normal
+except ImportError:
+    from tensorflow.python.ops.init_ops_v2 import Zeros, glorot_normal
+
+from tensorflow.python.keras.layers import Layer, Dropout, Input
 from tensorflow.python.keras.regularizers import l2
 from tensorflow.python.keras.models import Model
 
@@ -32,19 +37,19 @@ class GATLayer(Layer):
         self.weight = self.add_weight(name='weight', shape=[embedding_size, self.att_embedding_size * self.head_num],
                                       dtype=tf.float32,
                                       regularizer=l2(self.l2_reg),
-                                      initializer=tf.keras.initializers.glorot_uniform())
+                                      initializer=glorot_uniform())
         self.att_self_weight = self.add_weight(name='att_self_weight',
                                                shape=[1, self.head_num,
                                                       self.att_embedding_size],
                                                dtype=tf.float32,
                                                regularizer=l2(self.l2_reg),
-                                               initializer=tf.keras.initializers.glorot_uniform())
+                                               initializer=glorot_uniform())
         self.att_neighs_weight = self.add_weight(name='att_neighs_weight',
                                                  shape=[1, self.head_num,
                                                         self.att_embedding_size],
                                                  dtype=tf.float32,
                                                  regularizer=l2(self.l2_reg),
-                                                 initializer=tf.keras.initializers.glorot_uniform())
+                                                 initializer=glorot_uniform())
 
         if self.use_bias:
             self.bias_weight = self.add_weight(name='bias', shape=[1, self.head_num, self.att_embedding_size],
@@ -141,18 +146,18 @@ class GATLayer(Layer):
         return dict(list(base_config.items()) + list(config.items()))
 
 
-
-
-def GAT(adj_dim,feature_dim,num_class,num_layers=2,n_attn_heads = 8,att_embedding_size=8,dropout_rate=0.0,l2_reg=0.0,use_bias=True):
+def GAT(adj_dim, feature_dim, num_class, num_layers=2, n_attn_heads=8, att_embedding_size=8, dropout_rate=0.0,
+        l2_reg=0.0, use_bias=True):
     X_in = Input(shape=(feature_dim,))
     A_in = Input(shape=(adj_dim,))
     h = X_in
-    for _ in range(num_layers-1):
-        h = GATLayer(att_embedding_size=att_embedding_size, head_num=n_attn_heads, dropout_rate=dropout_rate, l2_reg=l2_reg,
-                                     activation=tf.nn.elu, use_bias=use_bias, )([h, A_in])
+    for _ in range(num_layers - 1):
+        h = GATLayer(att_embedding_size=att_embedding_size, head_num=n_attn_heads, dropout_rate=dropout_rate,
+                     l2_reg=l2_reg,
+                     activation=tf.nn.elu, use_bias=use_bias, )([h, A_in])
 
     h = GATLayer(att_embedding_size=num_class, head_num=1, dropout_rate=dropout_rate, l2_reg=l2_reg,
-                                 activation=tf.nn.softmax, use_bias=use_bias, reduction='mean')([h, A_in])
+                 activation=tf.nn.softmax, use_bias=use_bias, reduction='mean')([h, A_in])
 
     model = Model(inputs=[X_in, A_in], outputs=h)
 
