@@ -14,7 +14,7 @@ from gnn.utils import load_data_v1
 
 def test_GAT():
     # Read data
-    if tf.__version__ >= '2.0.0':  # todo
+    if tf.__version__ >= '2.0.0':
         tf.compat.v1.disable_eager_execution()
     A, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data_v1(
         'cora', path="./data/cora/")
