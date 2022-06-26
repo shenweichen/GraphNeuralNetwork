@@ -69,20 +69,13 @@ class GraphConvolution(Layer):  # ReLU(AXW)
     def call(self, inputs, training=None, **kwargs):
         features, A = inputs
         features = self.dropout(features, training=training)
-        # try:
-        #     output = tf.matmul(tf.sparse_tensor_dense_matmul(
-        #         A, features), self.kernel)
-        # except AttributeError:
-        #     output = tf.matmul(tf.sparse.sparse_dense_matmul(
-        #         A, features), self.kernel)
-        # except TypeError:
         output = tf.matmul(tf.matmul(
             A, features), self.kernel)
         if self.use_bias:
             output += self.bias
         act = self.activation(output)
 
-        #act._uses_learning_phase = features._uses_learning_phase
+        # act._uses_learning_phase = features._uses_learning_phase
         return act
 
     def get_config(self):
@@ -99,8 +92,9 @@ class GraphConvolution(Layer):  # ReLU(AXW)
         return dict(list(base_config.items()) + list(config.items()))
 
 
-def GCN(adj_dim,feature_dim,n_hidden, num_class, num_layers=2,activation=tf.nn.relu,dropout_rate=0.5, l2_reg=0, feature_less=True, ):
-    Adj = Input(shape=(adj_dim,))#Input(shape=(None,), sparse=True)
+def GCN(adj_dim, feature_dim, n_hidden, num_class, num_layers=2, activation=tf.nn.relu, dropout_rate=0.5, l2_reg=0,
+        feature_less=True, ):
+    Adj = Input(shape=(adj_dim,))  # Input(shape=(None,), sparse=True)
     if feature_less:
         X_in = Input(shape=(1,), )
 
@@ -117,9 +111,9 @@ def GCN(adj_dim,feature_dim,n_hidden, num_class, num_layers=2,activation=tf.nn.r
         if i == num_layers - 1:
             activation = tf.nn.softmax
             n_hidden = num_class
-        h = GraphConvolution(n_hidden, activation=activation, dropout_rate=dropout_rate, l2_reg=l2_reg)([h,Adj])
+        h = GraphConvolution(n_hidden, activation=activation, dropout_rate=dropout_rate, l2_reg=l2_reg)([h, Adj])
 
     output = h
-    model = Model(inputs=[X_in,Adj], outputs=output)
+    model = Model(inputs=[X_in, Adj], outputs=output)
 
     return model

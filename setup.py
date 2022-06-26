@@ -1,19 +1,16 @@
 import setuptools
 
-
 with open("README.md", "r") as fh:
-
     long_description = fh.read()
 
-
 REQUIRED_PACKAGES = [
+    'tensorflow>=1.12.0'
     'networkx',
     'numpy',
     'scikit-learn',
     'matplotlib',
 
 ]
-
 
 setuptools.setup(
 
@@ -35,9 +32,9 @@ setuptools.setup(
 
     extras_require={
 
-        "cpu": ['tensorflow>=1.4.0,!=1.7.*,!=1.8.*'],
+        "cpu": ['tensorflow>=1.12.0'],
 
-        "gpu": ['tensorflow-gpu>=1.4.0,!=1.7.*,!=1.8.*'],
+        "gpu": ['tensorflow-gpu>=1.12.0'],
 
     },
 
@@ -45,6 +42,5 @@ setuptools.setup(
 
     },
     license="MIT license",
-
 
 )
