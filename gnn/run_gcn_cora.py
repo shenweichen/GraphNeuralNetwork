@@ -27,7 +27,7 @@ if __name__ == "__main__":
     else:
         X = features
         feature_dim = X.shape[-1]
-    model_input = [X, A]
+    model_input = [X, A.toarray()]
 
     # Compile model
     model = GCN(A.shape[-1], feature_dim, 16, y_train.shape[1], dropout_rate=0.5, l2_reg=2.5e-4,
